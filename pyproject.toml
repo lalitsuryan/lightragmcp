@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lightrag-mcp-server"
+version = "1.0.0"
+description = "Model Context Protocol server for LightRAG - Complete RAG and Knowledge Graph integration"
+readme = "README.md"
+authors = [
+    { name = "Lalit Suryan", email = "lalit@example.com" }
+]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = [
+    "mcp",
+    "lightrag",
+    "rag",
+    "retrieval-augmented-generation",
+    "knowledge-graph",
+    "model-context-protocol",
+    "ai",
+    "llm"
+]
+dependencies = [
+    "modelcontextprotocol>=0.5.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/lalitsuryan/lightragmcp"
+Documentation = "https://github.com/lalitsuryan/lightragmcp#readme"
+Repository = "https://github.com/lalitsuryan/lightragmcp"
+Issues = "https://github.com/lalitsuryan/lightragmcp/issues"
+LightRAG = "https://github.com/HKUDS/LightRAG"
+
+[project.scripts]
+lightrag-mcp-server = "lightrag_mcp_server.__main__:main"
+
+[tool.setuptools]
+packages = ["lightrag_mcp_server"]
+
+[tool.setuptools.package-data]
+lightrag_mcp_server = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
