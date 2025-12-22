@@ -111,7 +111,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to contribute to this project.
 ## Support
 
 For issues and questions:
-- GitHub Issues: https://github.com/yourusername/lightrag-mcp-server/issues
+- GitHub Issues: https://github.com/lalitsuryan/lightragmcp/issues
 - LightRAG Discord: https://discord.gg/yF2MmDJyGJ
 
 ## Acknowledgments

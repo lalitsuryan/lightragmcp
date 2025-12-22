@@ -620,8 +620,8 @@ LightRAG supports multiple query modes for different use cases:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/lightrag-mcp-server.git
-cd lightrag-mcp-server
+git clone https://github.com/lalitsuryan/lightragmcp.git
+cd lightragmcp
 
 # For Python development
 pip install -e ".[dev]"
