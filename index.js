@@ -3,7 +3,7 @@
 /**
  * LightRAG MCP Server - Complete Node.js Implementation
  * 
- * Model Context Protocol server for LightRAG with 30+ tools
+ * Model Context Protocol server for LightRAG with 31 tools
  * 
  * Author: Lalit Suryan
  * License: MIT
@@ -37,7 +37,7 @@ const httpClient = axios.create({
 const server = new Server(
     {
         name: '@g99/lightrag-mcp-server',
-        version: '1.0.5',
+        version: '1.0.6',
     },
     {
         capabilities: {
@@ -46,7 +46,7 @@ const server = new Server(
     }
 );
 
-// All 30+ Tool definitions
+// All 31 Tool definitions (10 Document + 3 Query + 10 Knowledge Graph + 8 System)
 const tools = [
     // ===== DOCUMENT MANAGEMENT TOOLS (10) =====
     {
@@ -223,7 +223,7 @@ const tools = [
         }
     },
 
-    // ===== KNOWLEDGE GRAPH TOOLS (8) =====
+    // ===== KNOWLEDGE GRAPH TOOLS (10) =====
     {
         name: 'get_knowledge_graph',
         description: 'Retrieve the complete knowledge graph',
@@ -305,8 +305,55 @@ const tools = [
             required: ['relation_id']
         }
     },
+    {
+        name: 'get_graph_labels',
+        description: 'Get labels from the knowledge graph',
+        inputSchema: {
+            type: 'object',
+            properties: {}
+        }
+    },
+    {
+        name: 'update_relation',
+        description: 'Update properties of a relationship in the knowledge graph',
+        inputSchema: {
+            type: 'object',
+            properties: {
+                relation_id: { type: 'string', description: 'Relation ID' },
+                properties: { type: 'object', description: 'Properties to update' }
+            },
+            required: ['relation_id', 'properties']
+        }
+    },
 
-    // ===== SYSTEM MANAGEMENT TOOLS (5) =====
+    // ===== SYSTEM MANAGEMENT TOOLS (8) =====
+    {
+        name: 'get_pipeline_status',
+        description: 'Get the processing pipeline status from LightRAG',
+        inputSchema: {
+            type: 'object',
+            properties: {}
+        }
+    },
+    {
+        name: 'get_track_status',
+        description: 'Get track status by ID',
+        inputSchema: {
+            type: 'object',
+            properties: {
+                track_id: { type: 'string', description: 'ID of the track' }
+            },
+            required: ['track_id']
+        }
+    },
+    {
+        name: 'get_document_status_counts',
+        description: 'Get document status counts',
+        inputSchema: {
+            type: 'object',
+            properties: {}
+        }
+    },
     {
         name: 'get_health',
         description: 'Check LightRAG server health status',
@@ -489,7 +536,29 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 response = await httpClient.delete(`/graph/relation/${args.relation_id}`);
                 break;
 
+            case 'get_graph_labels':
+                response = await httpClient.get('/graph/labels');
+                break;
+
+            case 'update_relation':
+                response = await httpClient.put(`/graph/relation/${args.relation_id}`, {
+                    properties: args.properties
+                });
+                break;
+
             // SYSTEM MANAGEMENT
+            case 'get_pipeline_status':
+                response = await httpClient.get('/pipeline/status');
+                break;
+
+            case 'get_track_status':
+                response = await httpClient.get(`/track/${args.track_id}/status`);
+                break;
+
+            case 'get_document_status_counts':
+                response = await httpClient.get('/documents/status/counts');
+                break;
+
             case 'get_health':
                 response = await httpClient.get('/health');
                 break;
@@ -542,11 +611,11 @@ async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
     console.error('╔════════════════════════════════════════════════════════╗');
-    console.error('║  LightRAG MCP Server v1.0.4 - Started Successfully   ║');
+    console.error('║  LightRAG MCP Server v1.0.6 - Started Successfully   ║');
     console.error('╚════════════════════════════════════════════════════════╝');
     console.error(`Server: ${LIGHTRAG_SERVER_URL}`);
     console.error(`Workspace: ${LIGHTRAG_WORKSPACE}`);
-    console.error(`Tools: 30+ tools available`);
+    console.error(`Tools: 31 tools available (Most Complete!)`);
     console.error('Ready for connections...\n');
 }
 
