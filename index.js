@@ -610,9 +610,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error('╔════════════════════════════════════════════════════════╗');
-    console.error('║  LightRAG MCP Server v1.0.6 - Started Successfully   ║');
-    console.error('╚════════════════════════════════════════════════════════╝');
+    console.error('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+    console.error('â•‘  LightRAG MCP Server v1.0.6 - Started Successfully   â•‘');
+    console.error('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
     console.error(`Server: ${LIGHTRAG_SERVER_URL}`);
     console.error(`Workspace: ${LIGHTRAG_WORKSPACE}`);
     console.error(`Tools: 31 tools available (Most Complete!)`);
