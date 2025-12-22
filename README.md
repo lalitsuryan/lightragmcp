@@ -19,28 +19,24 @@ LightRAG MCP Server provides complete integration with LightRAG's API, offering 
 
 ## Installation
 
-### Using uvx (Python - Recommended)
-
-```bash
-uvx lightrag-mcp-server
-```
-
-### Using npx (Node.js)
+### Quick Start (Recommended)
 
 ```bash
 npx @g99/lightrag-mcp-server
 ```
 
-### Using pip (Global Installation)
-
-```bash
-pip install lightrag-mcp-server
-```
-
-### Using npm (Global Installation)
+### Global Installation
 
 ```bash
 npm install -g @g99/lightrag-mcp-server
+```
+
+### From Source
+
+```bash
+git clone https://github.com/lalitsuryan/lightragmcp.git
+cd lightragmcp
+npm install
 ```
 
 ## Prerequisites
@@ -85,26 +81,11 @@ If your LightRAG server has authentication enabled:
 2. Alternatively, check the startup logs for the API key
 3. Use that key in your MCP configuration
 
+## MCP Client Configuration
+
 ### Claude Desktop
 
-**Option 1: Using uvx (Python - Recommended)**
-
-```json
-{
-  "mcpServers": {
-    "lightrag": {
-      "command": "uvx",
-      "args": ["lightrag-mcp-server"],
-      "env": {
-        "LIGHTRAG_SERVER_URL": "http://localhost:9621",
-        "LIGHTRAG_API_KEY": "your_api_key_here"
-      }
-    }
-  }
-}
-```
-
-**Option 2: Using npx (Node.js)**
+Add to your `claude_desktop_config.json`:
 
 ```json
 {
@@ -123,24 +104,7 @@ If your LightRAG server has authentication enabled:
 
 ### Cline (VS Code Extension)
 
-**Option 1: Using uvx (Python - Recommended)**
-
-```json
-{
-  "mcpServers": {
-    "lightrag": {
-      "command": "uvx",
-      "args": ["lightrag-mcp-server"],
-      "env": {
-        "LIGHTRAG_SERVER_URL": "http://localhost:9621",
-        "LIGHTRAG_API_KEY": "your_api_key_here"
-      }
-    }
-  }
-}
-```
-
-**Option 2: Using npx (Node.js)**
+Add to your MCP settings:
 
 ```json
 {
