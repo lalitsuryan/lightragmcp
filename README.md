@@ -85,11 +85,9 @@ If your LightRAG server has authentication enabled:
 2. Alternatively, check the startup logs for the API key
 3. Use that key in your MCP configuration
 
-## MCP Client Configuration
-
 ### Claude Desktop
 
-Add to your `claude_desktop_config.json`:
+**Option 1: Using uvx (Python - Recommended)**
 
 ```json
 {
@@ -106,9 +104,26 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
+**Option 2: Using npx (Node.js)**
+
+```json
+{
+  "mcpServers": {
+    "lightrag": {
+      "command": "npx",
+      "args": ["@g99/lightrag-mcp-server"],
+      "env": {
+        "LIGHTRAG_SERVER_URL": "http://localhost:9621",
+        "LIGHTRAG_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
 ### Cline (VS Code Extension)
 
-Add to your MCP settings:
+**Option 1: Using uvx (Python - Recommended)**
 
 ```json
 {
@@ -116,6 +131,23 @@ Add to your MCP settings:
     "lightrag": {
       "command": "uvx",
       "args": ["lightrag-mcp-server"],
+      "env": {
+        "LIGHTRAG_SERVER_URL": "http://localhost:9621",
+        "LIGHTRAG_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+**Option 2: Using npx (Node.js)**
+
+```json
+{
+  "mcpServers": {
+    "lightrag": {
+      "command": "npx",
+      "args": ["@g99/lightrag-mcp-server"],
       "env": {
         "LIGHTRAG_SERVER_URL": "http://localhost:9621",
         "LIGHTRAG_API_KEY": "your_api_key_here"
