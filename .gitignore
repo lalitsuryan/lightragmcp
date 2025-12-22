@@ -1,3 +1,13 @@
+# Reference materials (not needed in repo)
+LightRAG-1.4.9.9/
+
+# Internal documentation (keep locally, not in repo)
+PROJECT_OVERVIEW.md
+PROJECT_COMPLETE.md
+FINAL_SUMMARY.md
+SUCCESS_SUMMARY.md
+PUBLISHING_GUIDE.md
+
 # Python
 __pycache__/
 *.py[cod]
