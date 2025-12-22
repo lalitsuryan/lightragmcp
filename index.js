@@ -3,7 +3,7 @@
 /**
  * LightRAG MCP Server - Complete Node.js Implementation
  * 
- * Model Context Protocol server for LightRAG with 31 tools
+ * Model Context Protocol server for LightRAG with 28 tools
  * 
  * Author: Lalit Suryan
  * License: MIT
@@ -27,8 +27,8 @@ const httpClient = axios.create({
     baseURL: LIGHTRAG_SERVER_URL,
     headers: {
         'Content-Type': 'application/json',
-        ...(LIGHTRAG_API_KEY && { 'Authorization': `Bearer ${LIGHTRAG_API_KEY}` }),
-        'X-Workspace': LIGHTRAG_WORKSPACE
+        // Use X-API-Key header as per OpenAPI spec
+        ...(LIGHTRAG_API_KEY && { 'X-API-Key': LIGHTRAG_API_KEY }),
     },
     timeout: 30000
 });
@@ -37,7 +37,7 @@ const httpClient = axios.create({
 const server = new Server(
     {
         name: '@g99/lightrag-mcp-server',
-        version: '1.0.6',
+        version: '1.0.9',
     },
     {
         capabilities: {
@@ -46,7 +46,7 @@ const server = new Server(
     }
 );
 
-// All 31 Tool definitions (10 Document + 3 Query + 10 Knowledge Graph + 8 System)
+// All 28 Tool definitions (10 Document + 3 Query + 10 Knowledge Graph + 5 System)
 const tools = [
     // ===== DOCUMENT MANAGEMENT TOOLS (10) =====
     {
@@ -300,9 +300,10 @@ const tools = [
         inputSchema: {
             type: 'object',
             properties: {
-                relation_id: { type: 'string', description: 'Relation ID' }
+                source_entity: { type: 'string', description: 'Source entity name' },
+                target_entity: { type: 'string', description: 'Target entity name' }
             },
-            required: ['relation_id']
+            required: ['source_entity', 'target_entity']
         }
     },
     {
@@ -319,14 +320,15 @@ const tools = [
         inputSchema: {
             type: 'object',
             properties: {
-                relation_id: { type: 'string', description: 'Relation ID' },
+                source_id: { type: 'string', description: 'Source entity name' },
+                target_id: { type: 'string', description: 'Target entity name' },
                 properties: { type: 'object', description: 'Properties to update' }
             },
-            required: ['relation_id', 'properties']
+            required: ['source_id', 'target_id', 'properties']
         }
     },
 
-    // ===== SYSTEM MANAGEMENT TOOLS (8) =====
+    // ===== SYSTEM MANAGEMENT TOOLS (5) =====
     {
         name: 'get_pipeline_status',
         description: 'Get the processing pipeline status from LightRAG',
@@ -363,14 +365,6 @@ const tools = [
         }
     },
     {
-        name: 'get_status',
-        description: 'Get detailed system status and statistics',
-        inputSchema: {
-            type: 'object',
-            properties: {}
-        }
-    },
-    {
         name: 'clear_cache',
         description: 'Clear LightRAG internal cache',
         inputSchema: {
@@ -378,22 +372,6 @@ const tools = [
             properties: {
                 cache_type: { type: 'string', description: 'Type of cache to clear' }
             }
-        }
-    },
-    {
-        name: 'get_config',
-        description: 'Get current LightRAG server configuration',
-        inputSchema: {
-            type: 'object',
-            properties: {}
-        }
-    },
-    {
-        name: 'get_workspace_info',
-        description: 'Get information about the current workspace',
-        inputSchema: {
-            type: 'object',
-            properties: {}
         }
     }
 ];
@@ -533,16 +511,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 break;
 
             case 'delete_relation':
-                response = await httpClient.delete(`/graph/relation/${args.relation_id}`);
+                response = await httpClient.delete('/documents/delete_relation', {
+                    data: {
+                        source_entity: args.source_entity,
+                        target_entity: args.target_entity
+                    }
+                });
                 break;
 
             case 'get_graph_labels':
-                response = await httpClient.get('/graph/labels');
+                response = await httpClient.get('/graph/label/list');
                 break;
 
             case 'update_relation':
-                response = await httpClient.put(`/graph/relation/${args.relation_id}`, {
-                    properties: args.properties
+                response = await httpClient.post('/graph/relation/edit', {
+                    source_id: args.source_id,
+                    target_id: args.target_id,
+                    updated_data: args.properties
                 });
                 break;
 
@@ -563,22 +548,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 response = await httpClient.get('/health');
                 break;
 
-            case 'get_status':
-                response = await httpClient.get('/status');
-                break;
-
             case 'clear_cache':
                 response = await httpClient.post('/cache/clear', {
                     cache_type: args.cache_type || 'all'
                 });
-                break;
-
-            case 'get_config':
-                response = await httpClient.get('/config');
-                break;
-
-            case 'get_workspace_info':
-                response = await httpClient.get('/workspace/info');
                 break;
 
             default:
@@ -610,12 +583,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
-    console.error('â•‘  LightRAG MCP Server v1.0.6 - Started Successfully   â•‘');
-    console.error('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+    console.error('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+    console.error('║  LightRAG MCP Server v1.0.9 - Started Successfully   ║');
+    console.error('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
     console.error(`Server: ${LIGHTRAG_SERVER_URL}`);
     console.error(`Workspace: ${LIGHTRAG_WORKSPACE}`);
-    console.error(`Tools: 31 tools available (Most Complete!)`);
+    console.error(`Tools: 26 tools available`);
     console.error('Ready for connections...\n');
 }
 

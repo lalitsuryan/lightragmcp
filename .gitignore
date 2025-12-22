@@ -74,3 +74,4 @@ dist/
 !*.config.js
 !wrapper.js
 !index.js
+!test-endpoints.js
