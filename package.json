@@ -1,6 +1,6 @@
 {
     "name": "@g99/lightrag-mcp-server",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Model Context Protocol (MCP) server for LightRAG - Complete RAG and Knowledge Graph integration with 30+ tools",
     "keywords": [
         "mcp",
@@ -18,7 +18,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/lalitsuryan/lightragmcp.git"
+        "url": "git+https://github.com/lalitsuryan/lightragmcp.git"
     },
     "bugs": {
         "url": "https://github.com/lalitsuryan/lightragmcp/issues"
@@ -32,7 +32,7 @@
         "postinstall": "echo 'LightRAG MCP Server is a Python package. Please ensure Python 3.10+ is installed and run: pip install lightrag-mcp-server'"
     },
     "bin": {
-        "lightrag-mcp-server": "./wrapper.js"
+        "lightrag-mcp-server": "wrapper.js"
     },
     "files": [
         "wrapper.js",
