@@ -1,6 +1,6 @@
 {
     "name": "@g99/lightrag-mcp-server",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Model Context Protocol (MCP) server for LightRAG - Complete RAG and Knowledge Graph integration with 30+ tools",
     "keywords": [
         "mcp",
@@ -27,17 +27,19 @@
     "publishConfig": {
         "access": "public"
     },
-    "scripts": {
-        "postinstall": "node wrapper.js"
-    },
+    "main": "index.js",
     "bin": {
-        "lightrag-mcp-server": "wrapper.js"
+        "lightrag-mcp-server": "index.js"
     },
     "files": [
-        "wrapper.js",
+        "index.js",
         "README.md",
         "LICENSE"
     ],
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^0.5.0",
+        "axios": "^1.6.0"
+    },
     "engines": {
         "node": ">=18.0.0"
     }
