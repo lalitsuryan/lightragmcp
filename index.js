@@ -37,7 +37,7 @@ const httpClient = axios.create({
 const server = new Server(
     {
         name: '@g99/lightrag-mcp-server',
-        version: '1.0.4',
+        version: '1.0.5',
     },
     {
         capabilities: {
@@ -366,20 +366,20 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         switch (name) {
             // DOCUMENT MANAGEMENT
             case 'insert_text':
-                response = await httpClient.post('/insert', {
+                response = await httpClient.post('/documents/text', {
                     text: args.text,
                     description: args.description
                 });
                 break;
 
             case 'insert_texts':
-                response = await httpClient.post('/insert_batch', {
+                response = await httpClient.post('/documents/texts', {
                     texts: args.texts
                 });
                 break;
 
             case 'upload_document':
-                response = await httpClient.post('/upload', {
+                response = await httpClient.post('/documents/upload', {
                     file_path: args.file_path,
                     chunk_size: args.chunk_size,
                     chunk_overlap: args.chunk_overlap
@@ -387,13 +387,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 break;
 
             case 'upload_documents':
-                response = await httpClient.post('/upload_batch', {
+                response = await httpClient.post('/documents/upload/batch', {
                     file_paths: args.file_paths
                 });
                 break;
 
             case 'scan_documents':
-                response = await httpClient.post('/scan');
+                response = await httpClient.post('/documents/scan');
                 break;
 
             case 'get_documents':
@@ -401,7 +401,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 break;
 
             case 'get_documents_paginated':
-                response = await httpClient.get(`/documents?page=${args.page}&page_size=${args.page_size}`);
+                response = await httpClient.get('/documents/paginated', {
+                    params: { page: args.page, page_size: args.page_size }
+                });
                 break;
 
             case 'delete_document':
@@ -413,7 +415,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 break;
 
             case 'document_status':
-                response = await httpClient.get(`/status/${args.document_id || ''}`);
+                if (args.document_id) {
+                    response = await httpClient.get(`/documents/${args.document_id}/status`);
+                } else {
+                    response = await httpClient.get('/documents/status');
+                }
                 break;
 
             // QUERY OPERATIONS
@@ -421,22 +427,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 response = await httpClient.post('/query', {
                     query: args.query,
                     mode: args.mode || 'hybrid',
-                    only_need_context: args.only_need_context,
-                    top_k: args.top_k
+                    only_need_context: args.only_need_context || false,
+                    top_k: args.top_k || 60
                 });
                 break;
 
             case 'query_text_stream':
-                response = await httpClient.post('/query/stream', {
+                response = await httpClient.post('/query', {
                     query: args.query,
-                    mode: args.mode || 'hybrid'
+                    mode: args.mode || 'hybrid',
+                    stream: true
                 });
                 break;
 
             case 'query_with_citation':
-                response = await httpClient.post('/query/citation', {
+                response = await httpClient.post('/query', {
                     query: args.query,
-                    mode: args.mode || 'hybrid'
+                    mode: args.mode || 'hybrid',
+                    with_citation: true
                 });
                 break;
 
@@ -450,19 +458,27 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 break;
 
             case 'get_entities':
-                response = await httpClient.get(`/graph/entities?limit=${args.limit || 100}`);
+                response = await httpClient.get('/graph/entities', {
+                    params: args.limit ? { limit: args.limit } : {}
+                });
                 break;
 
             case 'get_relations':
-                response = await httpClient.get(`/graph/relations?limit=${args.limit || 100}`);
+                response = await httpClient.get('/graph/relations', {
+                    params: args.limit ? { limit: args.limit } : {}
+                });
                 break;
 
             case 'check_entity_exists':
-                response = await httpClient.get(`/graph/entity/exists?name=${encodeURIComponent(args.entity_name)}`);
+                response = await httpClient.get('/graph/entity/exists', {
+                    params: { name: args.entity_name }
+                });
                 break;
 
             case 'update_entity':
-                response = await httpClient.put(`/graph/entity/${args.entity_id}`, args.properties);
+                response = await httpClient.put(`/graph/entity/${args.entity_id}`, {
+                    properties: args.properties
+                });
                 break;
 
             case 'delete_entity':
