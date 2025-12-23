@@ -1,7 +1,7 @@
 {
     "name": "@g99/lightrag-mcp-server",
-    "version": "1.0.9",
-    "description": "Model Context Protocol (MCP) server for LightRAG - Complete RAG and Knowledge Graph integration with 30+ tools",
+    "version": "1.1.0",
+    "description": "Model Context Protocol (MCP) server for LightRAG - 30 fully working tools with complete RAG and Knowledge Graph integration",
     "keywords": [
         "mcp",
         "lightrag",

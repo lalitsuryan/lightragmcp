@@ -4,18 +4,17 @@ A comprehensive Model Context Protocol (MCP) server for LightRAG - Simple and Fa
 
 ## Overview
 
-LightRAG MCP Server provides complete integration with LightRAG's API, offering 30+ tools for document management, knowledge graph operations, querying, and system management. Build sophisticated RAG applications with knowledge graph capabilities through a simple MCP interface.
+LightRAG MCP Server provides complete integration with LightRAG's API, offering **30 fully working tools** for document management, knowledge graph operations, querying, and system management. Build sophisticated RAG applications with knowledge graph capabilities through a simple MCP interface.
 
 ## Features
 
 - **Complete LightRAG API Coverage**: Access all major LightRAG endpoints
-- **30+ Tools**: Comprehensive toolset for RAG operations
+- **30 Working Tools**: All tools fully functional with correct API endpoints
 - **Knowledge Graph Operations**: Full control over entities and relationships
 - **Multiple Query Modes**: Support for naive, local, global, hybrid, and mix modes
 - **Document Management**: Insert, upload, scan, and manage documents
 - **Streaming Support**: Real-time streaming responses for queries
-- **Easy Installation**: Install via uvx or npx
-- **Dual Language Support**: Both Python and TypeScript implementations
+- **Easy Installation**: Install via npx
 
 ## Installation
 
@@ -694,17 +693,26 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Changelog
 
+### Version 1.1.0 (Latest - December 2024)
+
+**Major Update - All Tools Verified Working**
+
+- ✅ 30 fully working tools with verified API endpoints
+- ✅ Fixed authentication (X-API-Key header)
+- ✅ Added critical file_source parameters
+- ✅ Fixed request formats (doc_ids arrays, entity_name, etc.)
+- ✅ Added new tools: query_data, reprocess_failed_documents, cancel_pipeline
+- ✅ Added new graph tools: get_popular_labels, search_labels, create_entity, create_relation, merge_entities
+- ✅ Fixed get_documents_paginated (POST method)
+- ✅ Fixed get_knowledge_graph (wildcard label support)
+- ✅ All endpoints match actual LightRAG API
+
 ### Version 1.0.0 (Initial Release)
 
 - Complete LightRAG API integration
-- 30+ management tools
+- 30 management tools
 - Support for all query modes
 - Knowledge graph operations
-- Document management
-- Streaming support
-- Full TypeScript and Python support
-- Comprehensive documentation
-- UVX and NPX installation support
 
 ## Related Projects
 
